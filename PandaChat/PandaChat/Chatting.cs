@@ -10,7 +10,7 @@ using Microsoft.Phone.Shell;
 
 namespace PandaChat
 {
-    class Chatting
+    public class Chatting
     {
         //TCP Connection objects
         StreamWriter writer;

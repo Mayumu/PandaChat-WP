@@ -13,7 +13,7 @@ namespace PandaChat
     public partial class ChatPage : PhoneApplicationPage
     {
         public static ChatPage chatPage;
-        Chatting chat;
+        public Chatting chat;
         public string name;
 
         public ChatPage()
@@ -21,17 +21,21 @@ namespace PandaChat
             InitializeComponent();
             //make a static connection to be able to access this control
             App.chatPage = this;
-            //make a connection to the chat room
-            chat = new Chatting(name);
-            consolewrite("Connecting...");
-            chat.connect();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            //grab the name from the GET parameter
             string name;
             NavigationContext.QueryString.TryGetValue("name", out name);
             this.name = name;
+            //connect to the chat
+            if (chat == null)
+            {
+                chat = new Chatting(name);
+                consolewrite("Connecting...");
+                chat.connect();
+            }
         }
 
         public void consolewrite(string text)
@@ -47,8 +51,15 @@ namespace PandaChat
             if(textBoxMsg.Text != "")
             {
                 chat.say(textBoxMsg.Text);
+                consolewrite(name + ": " + textBoxMsg.Text);
                 textBoxMsg.Text = "";
             }
+        }
+
+        private void buttonMap_Click(object sender, RoutedEventArgs e)
+        {
+            chat.tell_server("NAMES #PandaChat");
+            NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));
         }
     }
 }
