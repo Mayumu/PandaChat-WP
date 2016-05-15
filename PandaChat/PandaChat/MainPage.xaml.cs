@@ -59,7 +59,7 @@ namespace PandaChat
             }
             catch
             {
-                //GPS error
+                MessageBox.Show("GPS or Internet connection error!");
             }
         }
     }
